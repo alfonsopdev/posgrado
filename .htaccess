@@ -1,0 +1,12 @@
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+RewriteEngine On
+
+# Proteger archivos y carpetas sensibles
+RewriteRule ^(bootstrap|config|vendor|storage/app|storage/framework|storage/logs|resources|routes|tests|\.env|\.git|composer\.lock|composer\.json|package\.json|phpunit\.xml)$ - [F,L]
+
+# Prevenir el listado de directorios
+Options -Indexes

@@ -1,0 +1,25 @@
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
+
+# Archivos de Base de Datos (Opcional)
+# Veo que tienes colegios.sql, distritos.sql, etc. 
+# Si son solo respaldos locales, ignóralos para no inflar el repositorio:
+*.sql
+.env_old
+# Sistema operativo
+.DS_Store
+Thumbs.db
+ 
