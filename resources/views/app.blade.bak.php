@@ -14,12 +14,13 @@ License: For each use you must have a valid license purchased only from above li
 	<!--begin::Head-->
 	<head>
 		<!--<base href="">-->
-		<title>Admision Posgrado | UNDC</title>
+		<title>Admision EPG | UNDC</title>
 		<meta charset="utf-8" />
 
-		<meta name="description" content="Plataforma de inscripciones para el examen de admisión de la Universidad Nacional de Cañete" />
-		<meta name="keywords" content="Admisión 2024, Examen de admisión, Universidad nacional de cañete" />
+		<meta name="description" content="Plataforma de inscripciones para el examen de admisión de la EPG  de la Universidad Nacional de Cañete" />
+		<!--<meta name="keywords" content="Metronic, bootstrap, bootstrap 5, Angular, VueJs, React, Laravel, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />-->
 		<!-- CSRF Token -->
+		<meta name="csrf-token" content="{{ csrf_token() }}">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--<meta property="og:locale" content="en_US" />-->
 		<!--<meta property="og:type" content="article" />-->
@@ -29,22 +30,23 @@ License: For each use you must have a valid license purchased only from above li
 
 		<!--<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />-->
 
-		<link rel="shortcut icon" href="/assets/media/logos/icono.png" />
+		<link rel="shortcut icon" href="assets/media/logos/icono.png" />
 		<!--begin::Fonts-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 		<!--end::Fonts-->
 		<!--begin::Vendor Stylesheets(used by this page)-->
-		<!--<link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />-->
+		<!--<link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />-->
+		<!-- Llamado de css de DataTables -->
+		<!-- <link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" /> -->
 		<!--end::Vendor Stylesheets-->
 		<!--begin::Global Stylesheets Bundle(used by all pages)-->
 		<!--<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 		<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />-->
 		<!--end::Global Stylesheets Bundle-->
-
-		<!-- {{-- <link rel="stylesheet" href="{{ mix('/css/plantilla.css') }}"> --}}
-		 <link href="./css/plantilla.css" rel="stylesheet" type="text/css" /> -->
-		 <link href="{{ asset('css/plantilla.css') }}" rel="stylesheet" type="text/css" />
+		<!-- Para que funcione con Laravel php artisan serve  -->
+		<!-- {{-- <link rel="stylesheet" href="{{ mix('css/plantilla.css') }}"> --}} -->
+		<!-- Para que funcione con vue -->
+ 		<link href="/inscripciones/public/css/plantilla.css" rel="stylesheet" type="text/css" />
 
 	</head>
 	<!--end::Head-->
@@ -57,7 +59,7 @@ License: For each use you must have a valid license purchased only from above li
 			if ( document.documentElement ) {
 				const defaultThemeMode = "system";
 				const name = document.body.getAttribute("data-kt-name");
-				let themeMode = localStorage.getItem("kt_" + ( name !== null ? name + "_" : "" ) + "theme_mode_value");
+				var themeMode = localStorage.getItem("kt_" + ( name !== null ? name + "_" : "" ) + "theme_mode_value");
 				if ( themeMode === null ) {
 					if ( defaultThemeMode === "system" ) {
 						themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -67,7 +69,12 @@ License: For each use you must have a valid license purchased only from above li
 		</script>
 		<!--end::Theme mode setup on page load-->
 		<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
-            @yield('content')
+			<!--<div id="app">-->
+			@if (Auth::check())
+				<App ruta="{{route('basepath')}}"></App>
+			@else
+				<Auth ruta="{{route('basepath')}}"></Auth>
+			@endif
         </div>
         <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 		<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
@@ -80,9 +87,11 @@ License: For each use you must have a valid license purchased only from above li
 		<script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
 		<script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
 		<script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
-		<!--<script src="assets/plugins/custom/datatables/datatables.bundle.js"></script>-->
+
 		<!--end::Vendors Javascript-->
 		<!--begin::Custom Javascript(used by this page)-->
+		<!-- Llamado de Js de DataTable -->
+		<!-- <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script> -->
 		<!--<script src="assets/js/widgets.bundle.js"></script>
 		<script src="assets/js/custom/widgets.js"></script>
 		<script src="assets/js/custom/apps/chat/chat.js"></script>
@@ -94,25 +103,37 @@ License: For each use you must have a valid license purchased only from above li
 		<!--end::Javascript-->
 		<script>
 		window.Laravel = {
+			csrfToken: '{{ csrf_token() }}',
 			jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():0 !!}
 		}
 		</script>
-        <!-- {{-- <script src="{{ mix('js/plantilla.js') }}"></script> --}} -->
-		<!-- <script src="./public/js/plantilla.js"></script> -->
-		<script src="{{ asset('js/plantilla.js') }}"></script>
-		<!--Start of Tawk.to Script-->
-		<!-- <script type="text/javascript">
-			var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-			(function(){
-			var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-			s1.async=true;
-			s1.src='https://embed.tawk.to/6024c90c918aa261273dd05b/1eu7r2mr9';
-			s1.charset='UTF-8';
-			s1.setAttribute('crossorigin','*');
-			s0.parentNode.insertBefore(s1,s0);
-			})();
-		</script> -->
+		<!-- Para que funcione con Laravel php artisan serve -->
+		<!-- {{-- <script src="{{ mix('js/plantilla.js') }}"></script>
+		<script src="{{ mix('js/app.js') }}"></script> --}} -->
+		<!-- Para que funcione con vue -->
+		<script src="/inscripciones/public/js/plantilla.js"></script>
+		<script src="/inscripciones/public/js/app.js"></script>
+        <!--Start of Tawk.to Script-->
+		@if (!Auth::check() || Auth::user()->hasRole('Postulante'))
+			<!-- <script type="text/javascript">
+				var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+				(function(){
+				var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+				s1.async=true;
+				s1.src='https://embed.tawk.to/6024c90c918aa261273dd05b/1eu7r2mr9';
+				s1.charset='UTF-8';
+				s1.setAttribute('crossorigin','*');
+				s0.parentNode.insertBefore(s1,s0);
+				})();
+			</script> -->
+        @endif
 		<!--End of Tawk.to Script-->
+
+		<!--
+		<script src="/inscripciones/public/js/plantilla.js"></script>
+		<script src="/inscripciones/public/js/app.js"></script>
+		-->
+
 	</body>
 	<!--end::Body-->
 </html>

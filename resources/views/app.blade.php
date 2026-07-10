@@ -14,7 +14,7 @@ License: For each use you must have a valid license purchased only from above li
 	<!--begin::Head-->
 	<head>
 		<!--<base href="">-->
-		<title>Admision EPG | UNDC</title>
+ 		<title>Admision EPG | UNDC</title>
 		<meta charset="utf-8" />
 
 		<meta name="description" content="Plataforma de inscripciones para el examen de admisión de la EPG  de la Universidad Nacional de Cañete" />
@@ -29,6 +29,7 @@ License: For each use you must have a valid license purchased only from above li
 		<meta property="og:site_name" content="Admisión EPG | UNDC" />
 
 		<!--<link rel="canonical" href="https://preview.keenthemes.com/metronic8" />-->
+		<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
 		<link rel="shortcut icon" href="assets/media/logos/icono.png" />
 		<!--begin::Fonts-->
@@ -46,8 +47,9 @@ License: For each use you must have a valid license purchased only from above li
 		<!-- Para que funcione con Laravel php artisan serve  -->
 		<!-- {{-- <link rel="stylesheet" href="{{ mix('css/plantilla.css') }}"> --}} -->
 		<!-- Para que funcione con vue -->
- 		<link href="/inscripciones/public/css/plantilla.css" rel="stylesheet" type="text/css" />
-
+		<!--<link href="{{ asset('css/plantilla.css') }}" rel="stylesheet" type="text/css" />-->
+		<!-- CAMBIO DE RUTA PARA QUE FUNCIONE CON VUE Y CON PHP ARTISAN SERVE -->
+		<link href="/inscripciones/css/plantilla.css" rel="stylesheet" type="text/css" /> 
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
@@ -111,8 +113,11 @@ License: For each use you must have a valid license purchased only from above li
 		<!-- {{-- <script src="{{ mix('js/plantilla.js') }}"></script>
 		<script src="{{ mix('js/app.js') }}"></script> --}} -->
 		<!-- Para que funcione con vue -->
-		<script src="/inscripciones/public/js/plantilla.js"></script>
-		<script src="/inscripciones/public/js/app.js"></script>
+		<!--<script src="{{ asset('js/plantilla.js') }}"></script>
+		<script src="{{ asset('js/app.js') }}"></script>-->
+		<!-- CAMBIO DE RUTA PARA QUE FUNCIONE CON VUE Y CON PHP ARTISAN SERVE -->
+		<script src="/inscripciones/js/plantilla.js"></script>
+		<script src="/inscripciones/js/app.js"></script>
         <!--Start of Tawk.to Script-->
 		@if (!Auth::check() || Auth::user()->hasRole('Postulante'))
 			<!-- <script type="text/javascript">
@@ -130,8 +135,8 @@ License: For each use you must have a valid license purchased only from above li
 		<!--End of Tawk.to Script-->
 
 		<!--
-		<script src="/inscripciones/public/js/plantilla.js"></script>
-		<script src="/inscripciones/public/js/app.js"></script>
+		<script src="{{ asset('js/plantilla.js') }}"></script>
+		<script src="{{ asset('js/app.js') }}"></script>
 		-->
 
 	</body>

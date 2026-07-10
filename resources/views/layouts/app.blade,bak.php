@@ -44,7 +44,7 @@ License: For each use you must have a valid license purchased only from above li
 
 		<!-- {{-- <link rel="stylesheet" href="{{ mix('/css/plantilla.css') }}"> --}}
 		 <link href="./css/plantilla.css" rel="stylesheet" type="text/css" /> -->
-		 <link href="{{ asset('css/plantilla.css') }}" rel="stylesheet" type="text/css" />
+		 <link href="/inscripciones/public/css/plantilla.css" rel="stylesheet" type="text/css" />
 
 	</head>
 	<!--end::Head-->
@@ -99,7 +99,7 @@ License: For each use you must have a valid license purchased only from above li
 		</script>
         <!-- {{-- <script src="{{ mix('js/plantilla.js') }}"></script> --}} -->
 		<!-- <script src="./public/js/plantilla.js"></script> -->
-		<script src="{{ asset('js/plantilla.js') }}"></script>
+		<script src="/inscripciones/public/js/plantilla.js"></script>
 		<!--Start of Tawk.to Script-->
 		<!-- <script type="text/javascript">
 			var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();

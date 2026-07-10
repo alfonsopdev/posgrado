@@ -116,7 +116,8 @@ import Footer from "./plantilla/Footer.vue";
 export default {
   data() {
     return {
-      NombreRuta: "/inscripciones/public",
+      //NombreRuta: "/inscripciones/public",
+      NombreRuta: "/inscripciones",
       user: null,
       UserData:{
         id:"",

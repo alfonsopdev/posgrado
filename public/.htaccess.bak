@@ -4,21 +4,17 @@
     </IfModule>
 
     RewriteEngine On
-    
-    # Forzar que la base de la URL sea el alias
-    RewriteBase /inscripciones/
 
-    # Manejar el encabezado de autorización de la API
+    # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Redirigir URLs con barras al final si no es una carpeta
+    # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Enviar todas las peticiones al Front Controller local (index.php)
-    # Evita que suba a buscar el index.php de WordPress
+    # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]

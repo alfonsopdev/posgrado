@@ -115,7 +115,14 @@ Route::group(['middleware' => ['auth:sanctum','verified']], function() {
     //NUEVAS RUTAS
     Route::post('api/usuarios-roles/verificar-manual/{id}', [App\Http\Controllers\Admin\UserController::class, 'verificarManual'])->middleware('role:Administrador|Asesor');
     Route::get('api/universidades/todas', [App\Http\Controllers\ColegioController::class, 'obtenerTodas']);
+    //GESTION PROCESO
+    Route::resource('api/procesos-admision', App\Http\Controllers\ProcesoAdmisionController::class)->middleware('role:Comision');
+    Route::post('api/locales/{local}/toggle-estado', [App\Http\Controllers\LocalController::class, 'toggleEstado'])
+        ->middleware('role:Comision');
 
+    Route::resource('api/locales', App\Http\Controllers\LocalController::class)
+        ->except(['destroy'])
+        ->middleware('role:Comision');
  
     Route::post('api/pagos/tarjeta', [App\Http\Controllers\PagoController::class, 'pago_tarjeta'])->middleware('role:Postulante');
     Route::post('api/pagos/verificar', [App\Http\Controllers\PagoController::class, 'verificar_pago'])->middleware('role:Administrador|Asesor|Colaborador|Tesoreria');
@@ -167,7 +174,15 @@ Route::group(['middleware' => ['auth:sanctum','verified']], function() {
     Route::get('api/reporte/publicidad', [App\Http\Controllers\ReporteGeneralController::class, 'reporte_publicidad']);
     Route::get('api/reporte/fecha', [App\Http\Controllers\ReporteGeneralController::class, 'reporte_fecha']);
 
-
+        Route::get('/debug-path', function () {
+            dd([
+                'uri' => request()->getRequestUri(),
+                'path' => request()->getPathInfo(),
+                'base' => request()->getBaseUrl(),
+                'root' => request()->root(),
+                'app_url' => config('app.url'),
+            ]);
+        });
 
 });
 

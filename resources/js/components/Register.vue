@@ -63,13 +63,13 @@
 						<div class="fv-row mb-5">
 							<select class="form-select" v-model="fillRegister.cCarrera" aria-label="Tipo de documento" required>
 								<option value="">Programa de interés</option>
-								<option value="1" hidden>
+								<option value="1">
                                 	Maestría en Gestión Pública
 								</option>
 								<option value="2" >
 									Maestría en Docencia Superior e Investigación
 								</option>
-								<option value="3" hidden>
+								<option value="3">
 								     Doctorado en administración
 								</option>
 							</select>

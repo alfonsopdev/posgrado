@@ -23,6 +23,10 @@ import reporteDistritos from './components/modulos/reporteDistritos.vue'
 import reportePublicidades from './components/modulos/reportePublicidades.vue'
 import reportePagos from './components/modulos/reportePagos.vue'
 
+//GESTION PROCESO 
+import GestionProceso from './components/modulos/ProcesoAdmision.vue'
+import GestionLocal from './components/modulos/Local.vue'
+
 import Colegios from './components/modulos/Colegios.vue'
 import Usuarios from './components/modulos/Usuarios.vue'
 import Calidad from './components/modulos/Calidad.vue'
@@ -194,6 +198,25 @@ export const routes = [
         }
     },
     //GESTION
+    {
+        name: 'procesoAdmision',
+        path: '/proceso-admision',
+        component: GestionProceso,
+        beforeEnter: (to, from, next) => {
+            if (is('Comision')) next();
+            else next('/inicio');
+        }
+    },
+    
+    {
+        name: 'gestionLocal',
+        path: '/gestion-local',
+        component: GestionLocal,
+        beforeEnter: (to, from, next) => {
+            if (is('Comision')) next();
+            else next('/inicio');
+        }
+    },
     {
         name: 'colegios',
         path: '/colegios',

@@ -62,7 +62,7 @@ import 'vue-select/dist/vue-select.css';
 
 const router = new VueRouter({
     mode: 'history',
-    base: '/inscripciones/public',
+    base: '/inscripciones',
     //base: '',
     //fallback:true,
     routes: routes
