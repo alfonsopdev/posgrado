@@ -45,6 +45,7 @@ class LocalController extends Controller
 
     public function update(Request $request, Local $local)
     {
+ 
         $data = $request->validate([
             'local'      => 'required|string|max:255|unique:locales,local,' . $local->id,
             'direccion'  => 'required|string|max:255',

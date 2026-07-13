@@ -69,4 +69,9 @@ class Ficha extends Model
         'postulacion',
         'extemporaneo'
     ];
+
+   public function procesoAdmision()
+    {
+        return $this->belongsTo(ProcesoAdmision::class, 'proceso_admision_id');
+    }
 }

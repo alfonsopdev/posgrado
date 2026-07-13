@@ -11,12 +11,11 @@ class ProcesoAdmision extends Model
     protected $table = 'procesos_admision';
 
     protected $fillable = [
-        'codigo', 'nombre', 'local_id', 'fecha_examen', 'hora_inicio', 'hora_fin',
-        'carnet_titulo', 'qr_base_url', 'activo'
+        'codigo', 'nombre', 'local_id', 'fecha_examen', 'hora_inicio', 'hora_fin', 'prospecto_url', 'qr_base_url', 'activo'
     ];
 
     protected $casts = [
-        'fecha_examen' => 'date',
+        'fecha_examen' => 'date:Y-m-d',
         'activo' => 'boolean',
     ];
 
@@ -27,11 +26,16 @@ class ProcesoAdmision extends Model
 
     public function fichas()
     {
-        return $this->hasMany(Ficha::class);
+        return $this->hasMany(Ficha::class, 'proceso_admision_id');
     }
 
     public static function getActivo()
     {
         return self::where('activo', true)->with('local')->first();
+    }
+
+    public function setProcesoAdmisionAttribute($value)
+    {
+        $this->attributes['proceso_admision'] = mb_strtoupper($value, 'UTF-8');
     }
 }

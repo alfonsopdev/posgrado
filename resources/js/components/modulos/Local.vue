@@ -28,8 +28,8 @@
         </div>
         <select class="form-select" style="max-width: 180px" v-model="filtroEstado">
           <option value="todos">Todos los estados</option>
-          <option value="activo">Solo activos</option>
-          <option value="inactivo">Solo inactivos</option>
+          <option value="1">Solo activos</option>
+          <option value="0">Solo inactivos</option>
         </select>
       </div>
     </div>
@@ -66,35 +66,35 @@
 
         <!-- Tabla con datos -->
         <div v-else key="estado-tabla" class="table-responsive">
-          <table class="table align-middle mb-0">
+          <table class="table align-center mb-0">
             <thead class="table-light">
               <tr>
-                <th>Nombre</th>
-                <th>Dirección</th>
-                <th>Estado</th>
-                <th class="text-end pe-4">Acciones</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Dirección</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center">Acciones</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="l in localesFiltrados" :key="l.id">
-                <td><span class="fw-medium">{{ l.local }}</span></td>
-                <td class="text-muted">{{ l.direccion }}</td>
-                <td>
-                  <span v-if="l.id_estado" class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle">
+                <td class="text-center"> {{ l.local }} </td>
+                <td class="text-muted text-center">{{ l.direccion }}</td>
+                <td class="text-center">
+                  <span v-if="l.id_estado" class="badge rounded-pill bg-success-subtle text-success border border-success-subtle">
                     <i class="bi bi-check-circle me-1"></i>Activo
                   </span>
-                  <span v-else class="badge rounded-pill bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle">
+                  <span v-else class="badge rounded-pill bg-secondary-subtle text-secondary border border-secondary-subtle">
                     Inactivo
                   </span>
                 </td>
-                <td class="text-end pe-4">
+                <td class="text-center">
                   <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-secondary" title="Editar" @click="editar(l)">
+                    <button class="btn btn-outline-primary" title="Editar" @click="editar(l)">
                       <i class="bi bi-pencil"></i>
                     </button>
                     <button
                       class="btn"
-                      :class="l.id_estado ? 'btn-outline-secondary' : 'btn-outline-success'"
+                      :class="l.id_estado ? 'btn-outline-danger' : 'btn-outline-success'"
                       :title="l.id_estado ? 'Desactivar' : 'Activar'"
                       :disabled="accionEnCurso === l.id"
                       @click="confirmarToggle(l)"
@@ -151,7 +151,7 @@
                 v-model="form.id_estado"
               >
               <label class="form-check-label" for="switchEstadoLocal">
-                {{ form.id_estado ? 'Activo' : 'Inactivo' }}
+                {{ form.id_estado ? 'activo' : 'desactivado' }}
               </label>
             </div>
             <div v-if="errorGuardado" class="alert alert-danger d-flex align-items-center gap-2 mt-3 mb-0">
@@ -252,8 +252,8 @@ export default {
           !q || l.local.toLowerCase().includes(q) || l.direccion.toLowerCase().includes(q);
         const coincideEstado =
           this.filtroEstado === 'todos' ||
-          (this.filtroEstado === 'activo' && l.id_estado) ||
-          (this.filtroEstado === 'inactivo' && !l.id_estado);
+          (this.filtroEstado === '1' && l.id_estado) ||
+          (this.filtroEstado === '0' && !l.id_estado);
         return coincideTexto && coincideEstado;
       });
     },
@@ -268,7 +268,7 @@ export default {
       return {
         local: '',
         direccion: '',
-        id_estado: true,
+        id_estado: 1,
       };
     },
 
@@ -297,7 +297,7 @@ export default {
       this.editando = true;
       this.errores = {};
       this.errorGuardado = null;
-      this.form = { ...l, id_estado: !!l.id_estado };
+      this.form = { ...l, id_estado: !!l.id_estado ? 1 : 0};
       this.modal.show();
     },
 

@@ -34,14 +34,7 @@
                         <label class="">
                             Colegio
                         </label>
-                        <!-- <select name="CboColegio" id="CboColegio" class="form-control" required="">
-                                    <option value="" hidden>Selecione su colegio</option>
-                                </select> -->
-                        <!-- <v-select label="nombre" :options="colegios" :reduce="usuarios => usuarios.id" v-model="nuevoRegistro.colegio">
-                                    <template #search="{attributes, events}">
-                                        <input class="vs__search" :required="true" v-bind="attributes" v-on="events" />
-                                    </template>
-                                </v-select> -->
+                        
                         <v-select :options="colegios" :reduce="colegios => colegios.id" @input="datosColegios()" label="nombre" class="vs-select-custom" v-model="colegio.id">
                             <template #search="{attributes, events}">
                                 <input class="vs__search" v-bind="attributes" v-on="events" />

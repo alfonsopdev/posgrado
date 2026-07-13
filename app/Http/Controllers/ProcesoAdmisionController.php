@@ -24,7 +24,7 @@ class ProcesoAdmisionController extends Controller
             'fecha_examen' => 'required|date',
             'hora_inicio' => 'required|string|max:10',
             'hora_fin' => 'required|string|max:10',
-            'carnet_titulo' => 'required|string|max:255',
+            'prospecto_url' => 'required|string|max:255',
             'qr_base_url' => 'required|string|max:255',
             'activo' => 'boolean',
         ]);
@@ -47,6 +47,7 @@ class ProcesoAdmisionController extends Controller
     public function update(Request $request, $id)
     {
         $proceso = ProcesoAdmision::findOrFail($id);
+        $request->merge(['proceso_admision' => mb_strtoupper($request->input('proceso_admision'), 'UTF-8')]);
 
         $data = $request->validate([
             'codigo' => 'required|string|max:20|unique:procesos_admision,codigo,' . $id,
@@ -55,7 +56,7 @@ class ProcesoAdmisionController extends Controller
             'fecha_examen' => 'required|date',
             'hora_inicio' => 'required|string|max:10',
             'hora_fin' => 'required|string|max:10',
-            'carnet_titulo' => 'required|string|max:255',
+            'prospecto_url' => 'required|string|max:255',
             'qr_base_url' => 'required|string|max:255',
             'activo' => 'boolean',
         ]);

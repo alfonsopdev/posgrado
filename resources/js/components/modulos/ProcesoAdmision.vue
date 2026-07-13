@@ -69,45 +69,51 @@
           <table class="table align-middle mb-0">
             <thead class="table-light">
               <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Sede</th>
-                <th>Fecha examen</th>
-                <th>Estado</th>
-                <th class="text-end pe-4">Acciones</th>
+                <th class="text-center">Código</th>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Sede</th>
+                <th class="text-center">Fecha examen</th>
+                <th class="text-center">Prospecto</th>
+                <th class="text-center">Estado</th>
+                <th class="text-center pe-4">Acciones</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="p in procesosFiltrados" :key="p.id">
-                <td><span class="fw-medium">{{ p.codigo }}</span></td>
-                <td>{{ p.nombre }}</td>
-                <td>{{ p.local?.local ?? '—' }}</td>
-                <td>{{ formatearFecha(p.fecha_examen) }}</td>
-                <td>
-                  <span v-if="p.activo" class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle">
+                <td class="text-center"> {{ p.codigo }}</td>
+                <td class="text-center">{{ p.nombre }}</td>
+                <td class="text-center">{{ p.local?.local ?? '—' }}</td>
+                <td class="text-center"> {{ p.fecha_examen }}</td>
+                <td class="text-center">
+                  <a v-if="p.prospecto_url" :href="p.prospecto_url" target="_blank">
+                    <i class="bi bi-filetype-pdf text-danger fs-5"></i>
+                  </a>
+                  <span v-else class="text-muted fs-6">—</span>
+                </td>
+                 <td class="text-center">
+                  <span v-if="p.activo" class="badge rounded-pill bg-success-subtle text-success border border-success-subtle">
                     <i class="bi bi-check-circle me-1"></i>Activo
                   </span>
-                  <span v-else class="badge rounded-pill bg-secondary-subtle text-secondary-emphasis border border-secondary-subtle">
+                  <span v-else class="badge rounded-pill bg-secondary-subtle text-secondary border border-secondary-subtle">
                     Inactivo
                   </span>
                 </td>
-                <td class="text-end pe-4">
+                <td class="text-center pe-4">
                   <div class="btn-group btn-group-sm">
                     <button class="btn btn-outline-secondary" title="Editar" @click="editar(p)">
-                      <i class="bi bi-pencil"></i>
+                      <i class="bi bi-pencil text-primary"></i>
                     </button>
-                    <button
-                      class="btn btn-outline-success"
-                      title="Activar"
-                      :disabled="p.activo || accionEnCurso === p.id"
-                      @click="confirmarActivar(p)"
-                    >
-                      <span v-if="accionEnCurso === p.id" class="spinner-border spinner-border-sm"></span>
-                      <i v-else class="bi bi-check-lg"></i>
-                    </button>
-                    <button class="btn btn-outline-danger" title="Eliminar" @click="confirmarEliminar(p)">
-                      <i class="bi bi-trash"></i>
-                    </button>
+                     <button
+                        :class="['btn', p.activo ? 'btn-outline-danger' : 'btn-outline-success']"
+                        :title="p.activo ? 'Desactivar' : 'Activar'"
+                        :disabled="accionEnCurso === p.id"
+                        @click="confirmarActivar(p)"
+                      >
+                        <span v-if="accionEnCurso === p.id" class="spinner-border spinner-border-sm"></span>
+                        <i v-else :class="['bi', p.activo ? 'bi-x-lg' : 'bi-check-lg']"></i>
+                      </button>
+
+                     
                   </div>
                 </td>
               </tr>
@@ -181,8 +187,8 @@
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label">Título del carné</label>
-                <input class="form-control" v-model="form.carnet_titulo" placeholder="CARNÉ DE POSTULANTE - DECLARACIÓN JURADA">
+                <label class="form-label">Prospecto (URL)</label>
+                <input class="form-control" v-model="form.prospecto_url" placeholder="https://...">
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label">URL base QR</label>
@@ -308,17 +314,11 @@ export default {
         fecha_examen: '',
         hora_inicio: '08:00 AM',
         hora_fin: '08:30 AM',
-        carnet_titulo: 'CARNÉ DE POSTULANTE - DECLARACIÓN JURADA',
         qr_base_url: 'https://posgrado.undc.edu.pe/carne_postulante.php?token=',
       };
     },
 
-    formatearFecha(fecha) {
-      if (!fecha) return '—';
-      const d = new Date(fecha + 'T00:00:00');
-      if (Number.isNaN(d.getTime())) return fecha;
-      return d.toLocaleDateString('es-PE', { year: 'numeric', month: 'short', day: '2-digit' });
-    },
+    
 
     async cargarProcesos() {
       this.cargando = true;
@@ -374,10 +374,10 @@ export default {
       this.errorGuardado = null;
       try {
         if (this.editando) {
-          await axios.put(`/api/procesos-admision/${this.form.id}`, this.form);
+          await axios.put(this.$parent.NombreRuta + `/api/procesos-admision/${this.form.id}`, this.form);
           this.mostrarToast('Proceso actualizado correctamente.');
         } else {
-          await axios.post('/api/procesos-admision', this.form);
+          await axios.post(this.$parent.NombreRuta + '/api/procesos-admision', this.form);
           this.mostrarToast('Proceso creado correctamente.');
         }
         this.modal.hide();
@@ -390,56 +390,45 @@ export default {
     },
 
     confirmarActivar(p) {
-      this.confirmacion = {
-        icono: 'bi-check-circle',
-        colorIcono: 'text-success',
-        colorBoton: 'btn-success',
-        titulo: 'Activar este proceso',
-        mensaje: `Se activará "${p.nombre}". Esta acción puede desactivar otros procesos activos, según la configuración del sistema.`,
-        textoBoton: 'Activar',
-        accion: () => this.activar(p.id),
-      };
+      if (p.activo) {
+        // Configuración agregada para DESACTIVAR
+        this.confirmacion = {
+          icono: 'bi-x-circle',
+          colorIcono: 'text-danger',
+          colorBoton: 'btn-danger',
+          titulo: 'Desactivar este proceso',
+          mensaje: `Se desactivará "${p.nombre}". El proceso ya no estará disponible para los usuarios.`,
+          textoBoton: 'Desactivar',
+          accion: () => this.activar(p.id, 'desactivar'),
+        };
+      } else {
+        // Tu configuración ORIGINAL para ACTIVAR
+        this.confirmacion = {
+          icono: 'bi-check-circle',
+          colorIcono: 'text-success',
+          colorBoton: 'btn-success',
+          titulo: 'Activar este proceso',
+          mensaje: `Se activará "${p.nombre}". Esta acción puede desactivar otros procesos activos, según la configuración del sistema.`,
+          textoBoton: 'Activar',
+          accion: () => this.activar(p.id, 'activar'),
+        };
+      }
       this.modalConfirmar.show();
     },
 
-    async activar(id) {
+    async activar(id, accion) {
       this.modalConfirmar.hide();
       this.accionEnCurso = id;
       try {
-        await axios.post(`/api/procesos-admision/${id}/activar`);
-        this.mostrarToast('Proceso activado correctamente.');
+        await axios.post(this.$parent.NombreRuta + `/api/procesos-admision/${id}/${accion}`);
+        this.mostrarToast(`Proceso ${accion === 'activar' ? 'activado' : 'desactivado'} correctamente.`);
         this.cargarProcesos();
       } catch (e) {
-        this.mostrarToast(e.response?.data?.message || 'No se pudo activar el proceso.', 'error');
+        this.mostrarToast(e.response?.data?.message || `No se pudo ${accion === 'activar' ? 'activar' : 'desactivar'} el proceso.`, 'error');
       } finally {
         this.accionEnCurso = null;
       }
     },
-
-    confirmarEliminar(p) {
-      this.confirmacion = {
-        icono: 'bi-trash',
-        colorIcono: 'text-danger',
-        colorBoton: 'btn-danger',
-        titulo: 'Eliminar proceso',
-        mensaje: `¿Seguro que deseas eliminar "${p.nombre}"? Esta acción no se puede deshacer.`,
-        textoBoton: 'Eliminar',
-        accion: () => this.eliminar(p.id),
-      };
-      this.modalConfirmar.show();
-    },
-
-    async eliminar(id) {
-      this.modalConfirmar.hide();
-      try {
-        await axios.delete(`/api/procesos-admision/${id}`);
-        this.mostrarToast('Proceso eliminado correctamente.');
-        this.cargarProcesos();
-      } catch (e) {
-        this.mostrarToast(e.response?.data?.message || 'No se pudo eliminar el proceso.', 'error');
-      }
-    },
-
     mostrarToast(mensaje, tipo = 'ok') {
       const id = ++this.toastId;
       this.toasts.push({ id, mensaje, tipo });

@@ -26,6 +26,8 @@ import reportePagos from './components/modulos/reportePagos.vue'
 //GESTION PROCESO 
 import GestionProceso from './components/modulos/ProcesoAdmision.vue'
 import GestionLocal from './components/modulos/Local.vue'
+import GestionPrograma from './components/modulos/Programa.vue'
+import ReporteDashboard from './components/modulos/ReporteDashboard.vue'
 
 import Colegios from './components/modulos/Colegios.vue'
 import Usuarios from './components/modulos/Usuarios.vue'
@@ -212,6 +214,24 @@ export const routes = [
         name: 'gestionLocal',
         path: '/gestion-local',
         component: GestionLocal,
+        beforeEnter: (to, from, next) => {
+            if (is('Comision')) next();
+            else next('/inicio');
+        }
+    },
+    {
+        name: 'gestionPrograma',
+        path: '/gestion-programa',
+        component: GestionPrograma,
+        beforeEnter: (to, from, next) => {
+            if (is('Comision')) next();
+            else next('/inicio');
+        }
+    },
+    {
+        name: 'reportes-dashboard',
+        path: '/reportes-dashboard',
+        component: ReporteDashboard,
         beforeEnter: (to, from, next) => {
             if (is('Comision')) next();
             else next('/inicio');

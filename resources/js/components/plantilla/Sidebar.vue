@@ -92,6 +92,14 @@
 					 
 						<div class="menu-sub menu-sub-accordion">
 							<div class="menu-item" v-if="is('Comision')">
+ 								<router-link class="menu-link" to="/reportes-dashboard" exact-active-class="active">
+									<span class="menu-bullet">
+										<span class="bullet bullet-dot"></span>
+									</span>
+									<span class="menu-title">Dashboard de proceso</span>
+								</router-link>
+ 							</div>
+							<div class="menu-item" v-if="is('Comision')">
  								<router-link class="menu-link" to="/proceso-admision" exact-active-class="active">
 									<span class="menu-bullet">
 										<span class="bullet bullet-dot"></span>
@@ -105,6 +113,14 @@
 										<span class="bullet bullet-dot"></span>
 									</span>
 									<span class="menu-title">Gestión de local</span>
+								</router-link>
+ 							</div> 
+							<div class="menu-item" v-if="is('Comision')">
+ 								<router-link class="menu-link" to="/gestion-programa" exact-active-class="active">
+									<span class="menu-bullet">
+										<span class="bullet bullet-dot"></span>
+									</span>
+									<span class="menu-title">Gestión de programa</span>
 								</router-link>
  							</div> 
 						</div>

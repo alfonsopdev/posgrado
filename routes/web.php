@@ -117,12 +117,23 @@ Route::group(['middleware' => ['auth:sanctum','verified']], function() {
     Route::get('api/universidades/todas', [App\Http\Controllers\ColegioController::class, 'obtenerTodas']);
     //GESTION PROCESO
     Route::resource('api/procesos-admision', App\Http\Controllers\ProcesoAdmisionController::class)->middleware('role:Comision');
+    route::post('api/procesos-admision/{proceso}/activar', [App\Http\Controllers\ProcesoAdmisionController::class, 'activar'])->middleware('role:Comision');
     Route::post('api/locales/{local}/toggle-estado', [App\Http\Controllers\LocalController::class, 'toggleEstado'])
         ->middleware('role:Comision');
 
     Route::resource('api/locales', App\Http\Controllers\LocalController::class)
         ->except(['destroy'])
+        ->parameters(['locales' => 'local'])
         ->middleware('role:Comision');
+    Route::resource('api/programas', App\Http\Controllers\ProgramaController::class)
+        ->except(['destroy'])
+        ->parameters(['programas' => 'programa'])
+        ->middleware('role:Comision');
+    Route::post('api/programas/{programa}/toggle-estado', [App\Http\Controllers\ProgramaController::class, 'toggleEstado'])
+        ->middleware('role:Comision');
+
+    Route::get('api/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware('role:Comision');
  
     Route::post('api/pagos/tarjeta', [App\Http\Controllers\PagoController::class, 'pago_tarjeta'])->middleware('role:Postulante');
     Route::post('api/pagos/verificar', [App\Http\Controllers\PagoController::class, 'verificar_pago'])->middleware('role:Administrador|Asesor|Colaborador|Tesoreria');
