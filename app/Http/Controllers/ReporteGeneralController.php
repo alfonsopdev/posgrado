@@ -635,6 +635,7 @@ class ReporteGeneralController extends Controller
     {
         $carreras = DB::table('carreras')
             ->select('id', 'carrera')
+            ->where('estado', 1) // Solo carreras activas
             ->orderBy('carrera', 'asc') // Orden alfabético
             ->get();
 

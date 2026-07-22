@@ -178,11 +178,31 @@
                 <div class="invalid-feedback">{{ errores.fecha_examen }}</div>
               </div>
               <div class="col-md-3 mb-3">
-                <label class="form-label">Hora inicio / fin</label>
+                <label class="form-label">Hora inicio / fin Ingreso</label>
                 <div class="d-flex gap-2">
                   <input class="form-control" v-model="form.hora_inicio" placeholder="08:00 AM">
                   <input class="form-control" v-model="form.hora_fin" placeholder="08:30 AM">
                 </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Fecha Inicio Inscripción <span class="text-danger">*</span></label>
+                <input
+                  type="date"
+                  class="form-control"
+                  :class="{ 'is-invalid': errores.fecIni_inscripcion }"
+                  v-model="form.fecIni_inscripcion"
+                >
+                <div class="invalid-feedback">{{ errores.fecIni_inscripcion }}</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Fecha Fin Inscripción <span class="text-danger">*</span></label>
+                <input
+                  type="date"
+                  class="form-control"
+                  :class="{ 'is-invalid': errores.fecFin_inscripcion }"
+                  v-model="form.fecFin_inscripcion"
+                >
+                <div class="invalid-feedback">{{ errores.fecFin_inscripcion }}</div>
               </div>
             </div>
             <div class="row">
@@ -314,6 +334,8 @@ export default {
         fecha_examen: '',
         hora_inicio: '08:00 AM',
         hora_fin: '08:30 AM',
+        fecIni_inscripcion: '',
+        fecFin_inscripcion: '',
         qr_base_url: 'https://posgrado.undc.edu.pe/carne_postulante.php?token=',
       };
     },

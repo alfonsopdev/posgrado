@@ -70,12 +70,12 @@
 						<!--end:Menu link-->
 					</div>
 					<!--end:Menu item-->
-					<div class="menu-item pt-5">
+					<div class="menu-item pt-5" v-if="is('Administrador') || is('Comision')">
  						<div class="menu-content">
 							<span class="menu-heading fw-bold text-uppercase fs-7">Configuración</span>
 						</div>
  					</div>
-					<div data-kt-menu-trigger="click" class="menu-item menu-accordion" v-if="is('Comision')">
+					<div data-kt-menu-trigger="click" class="menu-item menu-accordion" v-if="is('Administrador') || is('Comision')">
  						<span class="menu-link">
 							<span class="menu-icon">
  								<span class="svg-icon svg-icon-muted svg-icon-2"><svg width="25" height="28"
@@ -91,7 +91,7 @@
 						</span>
 					 
 						<div class="menu-sub menu-sub-accordion">
-							<div class="menu-item" v-if="is('Comision')">
+							<div class="menu-item" v-if="is('Administrador') || is('Comision')">
  								<router-link class="menu-link" to="/reportes-dashboard" exact-active-class="active">
 									<span class="menu-bullet">
 										<span class="bullet bullet-dot"></span>
@@ -99,7 +99,7 @@
 									<span class="menu-title">Dashboard de proceso</span>
 								</router-link>
  							</div>
-							<div class="menu-item" v-if="is('Comision')">
+							<div class="menu-item" v-if="is('Administrador') || is('Comision')">
  								<router-link class="menu-link" to="/proceso-admision" exact-active-class="active">
 									<span class="menu-bullet">
 										<span class="bullet bullet-dot"></span>
@@ -107,7 +107,7 @@
 									<span class="menu-title">Gestión de proceso</span>
 								</router-link>
  							</div>
-							<div class="menu-item" v-if="is('Comision')">
+							<div class="menu-item" v-if="is('Administrador') || is('Comision')">
  								<router-link class="menu-link" to="/gestion-local" exact-active-class="active">
 									<span class="menu-bullet">
 										<span class="bullet bullet-dot"></span>
@@ -115,7 +115,15 @@
 									<span class="menu-title">Gestión de local</span>
 								</router-link>
  							</div> 
-							<div class="menu-item" v-if="is('Comision')">
+							<div class="menu-item" v-if="is('Administrador') || is('Comision')">
+ 								<router-link class="menu-link" to="/gestion-aula" exact-active-class="active">
+									<span class="menu-bullet">
+										<span class="bullet bullet-dot"></span>
+									</span>
+									<span class="menu-title">Gestión de aula</span>
+								</router-link>
+ 							</div> 
+							<div class="menu-item" v-if="is('Administrador') || is('Comision')">
  								<router-link class="menu-link" to="/gestion-programa" exact-active-class="active">
 									<span class="menu-bullet">
 										<span class="bullet bullet-dot"></span>

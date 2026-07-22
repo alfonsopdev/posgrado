@@ -639,9 +639,7 @@ class FichaController extends Controller
 
     public function generar_carnet(Request $request)
     {
-        /* $qrcode = base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate('string')); */
-        /* $qrcode = QrCode::generate('Welcome to Makitweb'); */
-        //$url = 'https://posgrado.undc.edu.pe/inscripciones/public/inscripcion/carne3?token='.$request->token;
+        
         $url = 'https://posgrado.undc.edu.pe/carne_postulante.php?token=' . $request->token;
         $qrcode = base64_encode(QrCode::format('svg')->size(95)->errorCorrection('H')->generate($url));
         $token = isset($request->token) ? $request->token : null;
@@ -650,10 +648,7 @@ class FichaController extends Controller
 
         $resultado = $this->ver($id_ficha);
         $resultado = $resultado->getData('ficha');
-        // if( $resultado['ficha']['mcp_id_modalidad']==8 || $resultado['ficha']['id_aula']==null){
-        // //if($resultado['ficha']['mcp_id_modalidad']==1 || $resultado['ficha']['mcp_id_modalidad']==8){
-        //     exit();
-        // }
+        
         if ($download && $download = "si") {
             $fecha = date("Y-m-d H:i:s");
             $affected = DB::table('fichas')
@@ -855,5 +850,68 @@ class FichaController extends Controller
     public function destroy(Ficha $ficha)
     {
         //
+    }
+
+     public function anular_inscripcion(Request $request, $ficha) // 1. Capturamos {ficha} desde la URL
+    {
+        // 2. Validamos que las observaciones sean obligatorias y válidas
+        $request->validate([
+            'observaciones' => 'required|string|min:10|max:500'
+        ]);
+
+        // 3. Buscamos la ficha primero para verificar sus condiciones y dar feedback real
+        $registro = DB::table('fichas')->where('id', $ficha)->first();
+
+        if (!$registro) {
+            return response()->json([
+                'status' => 'error',
+                'success' => false,
+                'message' => 'La ficha de inscripción no existe.'
+            ], 404);
+        }
+
+        // 4. (Opcional) Validar si cumple con tus requisitos de negocio antes de proceder
+        if ($registro->id_estado_revision != 3) {
+            return response()->json([
+                'status' => 'error',
+                'success' => false,
+                'message' => 'No se puede anular. La ficha debe estar en estado Revisado/Aprobado (Estado 3).'
+            ], 422);
+        }
+
+        if (is_null($registro->codigo_p)) {
+            return response()->json([
+                'status' => 'error',
+                'success' => false,
+                'message' => 'No se puede anular una ficha que no cuenta con un código de postulante.'
+            ], 422);
+        }
+
+        // 5. Si pasa todos los filtros, procedemos a actualizar
+        $fecha = date("Y-m-d H:i:s");
+        
+        $affected = DB::table('fichas')
+            ->where('id', $ficha)
+            ->update([
+                'estado_postulante' => 'ANULADO',
+                'id_estado'         => 0,
+                'fecha_anulacion'   => $fecha,
+                'id_usu_anulado'    => Auth::user()->id,
+                'observaciones'     => $request->observaciones
+            ]);
+
+        if ($affected) {
+            return response()->json([
+                'status' => 'success',
+                'success' => true,
+                'message' => 'La inscripción ha sido anulada con éxito.'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'success' => false,
+            'message' => 'No se realizaron cambios en la ficha.'
+        ], 500);
     }
 }

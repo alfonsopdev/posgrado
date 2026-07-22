@@ -27,6 +27,7 @@ import reportePagos from './components/modulos/reportePagos.vue'
 import GestionProceso from './components/modulos/ProcesoAdmision.vue'
 import GestionLocal from './components/modulos/Local.vue'
 import GestionPrograma from './components/modulos/Programa.vue'
+import GestionAula from './components/modulos/Aulas.vue'
 import ReporteDashboard from './components/modulos/ReporteDashboard.vue'
 
 import Colegios from './components/modulos/Colegios.vue'
@@ -205,7 +206,7 @@ export const routes = [
         path: '/proceso-admision',
         component: GestionProceso,
         beforeEnter: (to, from, next) => {
-            if (is('Comision')) next();
+            if (is('Administrador') || is('Comision')) next();
             else next('/inicio');
         }
     },
@@ -215,7 +216,16 @@ export const routes = [
         path: '/gestion-local',
         component: GestionLocal,
         beforeEnter: (to, from, next) => {
-            if (is('Comision')) next();
+            if (is('Administrador') || is('Comision')) next();
+            else next('/inicio');
+        }
+    },
+    {
+        name: 'gestion-aula',
+        path: '/gestion-aula',
+        component: GestionAula,
+        beforeEnter: (to, from, next) => {
+            if (is('Administrador') || is('Comision')) next();
             else next('/inicio');
         }
     },
@@ -224,7 +234,7 @@ export const routes = [
         path: '/gestion-programa',
         component: GestionPrograma,
         beforeEnter: (to, from, next) => {
-            if (is('Comision')) next();
+            if (is('Administrador') || is('Comision')) next();
             else next('/inicio');
         }
     },
@@ -233,10 +243,11 @@ export const routes = [
         path: '/reportes-dashboard',
         component: ReporteDashboard,
         beforeEnter: (to, from, next) => {
-            if (is('Comision')) next();
+            if (is('Administrador') || is('Comision')) next();
             else next('/inicio');
         }
     },
+     
     {
         name: 'colegios',
         path: '/colegios',

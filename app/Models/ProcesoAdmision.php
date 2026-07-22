@@ -11,11 +11,13 @@ class ProcesoAdmision extends Model
     protected $table = 'procesos_admision';
 
     protected $fillable = [
-        'codigo', 'nombre', 'local_id', 'fecha_examen', 'hora_inicio', 'hora_fin', 'prospecto_url', 'qr_base_url', 'activo'
+        'codigo', 'nombre', 'local_id', 'fecha_examen', 'hora_inicio', 'hora_fin', 'fecIni_inscripcion', 'fecFin_inscripcion', 'prospecto_url', 'qr_base_url', 'activo'
     ];
 
     protected $casts = [
         'fecha_examen' => 'date:Y-m-d',
+        'fecIni_inscripcion' => 'date:Y-m-d',
+        'fecFin_inscripcion' => 'date:Y-m-d',
         'activo' => 'boolean',
     ];
 

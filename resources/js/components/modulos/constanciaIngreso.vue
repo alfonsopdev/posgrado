@@ -12,7 +12,7 @@
                     <!-- Filtro de busqueda por Carreras  -->
                     <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
                         <label>
-                            Carreras
+                            Programas
                         </label>
                         <select class="form-select" @change="buscar(1)" aria-label="Select example" v-model.number="filtros.carrera">
                             <option value="">TODOS</option>
@@ -24,42 +24,7 @@
                             </option>
                         </select> 
                     </div>
-                    <!-- Filtro de busqueda de Modalidades  -->
-                    <!-- <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12">
-                        <label>
-                            Modalidades
-                        </label>
-                        <select class="form-select" @change="buscar(1)" aria-label="Select example" v-model.number="filtros.modalidad">
-                            <option value="">TODOS</option>
-                            <option value="1">Ordinario</option>
-                            <option value="2">
-                                Primeros Puestos
-                            </option>
-                            <option value="3">
-                                Graduados y Titulados
-                            </option>
-                            <option value="10">
-                                Traslado Interno
-                            </option>
-                            <option value="4">
-                                Traslado Externo
-                            </option>
-                            <option value="5">
-                                Ley 29973 Personas con Discapacidad
-                            </option>
-                            <option value="6">
-                                Ley 28036 Deportitas Calificados
-                            </option>
-                            <option value="7">
-                                Ley 27277 Victimas del Terrorismo
-                            </option>
-                            <option value="8">
-                                Centro PRE (Ingresantes).
-                            </option>
-                            <option value="11">Quinto de Secundaria</option>
-                        </select> 
-                    </div> -->
-                    <!-- Filtro de busqueda por DNI o código -->
+                   
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>
                             Buscar
@@ -101,7 +66,7 @@
                             <tr class="fw-bold text-muted bg-light">
                                 <th class="ps-4 rounded-start">N°</th>
                                 <!-- <th>Modalidad</th> -->
-                                <th>CARRERA</th>
+                                <th>PROGRAMA</th>
                                 <th>CODIGO</th>
                                 <th>DNI</th>
                                 <th>APELLIDOS</th>
@@ -111,8 +76,7 @@
                                 <th class="text-center rounded-end" style="width: 200px;">ACCION</th>
                             </tr>
                         </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
+                         
                         <tbody>
                             <tr v-if="botonCargando">
                                 <td colspan="12" class="text-center">
@@ -125,9 +89,7 @@
                                 <td class="ps-4">
                                    {{index+1}} 
                                 </td>
-                                <!-- <td>
-                                    {{dato.modalidad}}
-                                </td> -->
+                                
                                 <td>
                                     {{dato.carrera}}
                                 </td>

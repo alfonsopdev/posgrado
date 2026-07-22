@@ -24,6 +24,8 @@ class ProcesoAdmisionController extends Controller
             'fecha_examen' => 'required|date',
             'hora_inicio' => 'required|string|max:10',
             'hora_fin' => 'required|string|max:10',
+            'fecIni_inscripcion' => 'required|date',
+            'fecFin_inscripcion' => 'required|date|after_or_equal:fecIni_inscripcion',
             'prospecto_url' => 'required|string|max:255',
             'qr_base_url' => 'required|string|max:255',
             'activo' => 'boolean',
@@ -56,6 +58,8 @@ class ProcesoAdmisionController extends Controller
             'fecha_examen' => 'required|date',
             'hora_inicio' => 'required|string|max:10',
             'hora_fin' => 'required|string|max:10',
+            'fecIni_inscripcion' => 'required|date',
+            'fecFin_inscripcion' => 'required|date|after_or_equal:fecIni_inscripcion',
             'prospecto_url' => 'required|string|max:255',
             'qr_base_url' => 'required|string|max:255',
             'activo' => 'boolean',
@@ -93,5 +97,18 @@ class ProcesoAdmisionController extends Controller
             'message' => 'Proceso activado correctamente',
             'data' => $proceso->load('local'),
         ]);
+    }
+
+     public function activo()
+    {
+        $proceso = ProcesoAdmision::where('activo', 1)
+            ->orderByDesc('fecha_examen')
+            ->first();
+
+        if (!$proceso) {
+            return response()->json(['data' => null], 404);
+        }
+
+        return response()->json(['data' => $proceso]);
     }
 }

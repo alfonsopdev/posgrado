@@ -116,24 +116,18 @@ Route::group(['middleware' => ['auth:sanctum','verified']], function() {
     Route::post('api/usuarios-roles/verificar-manual/{id}', [App\Http\Controllers\Admin\UserController::class, 'verificarManual'])->middleware('role:Administrador|Asesor');
     Route::get('api/universidades/todas', [App\Http\Controllers\ColegioController::class, 'obtenerTodas']);
     //GESTION PROCESO
-    Route::resource('api/procesos-admision', App\Http\Controllers\ProcesoAdmisionController::class)->middleware('role:Comision');
-    route::post('api/procesos-admision/{proceso}/activar', [App\Http\Controllers\ProcesoAdmisionController::class, 'activar'])->middleware('role:Comision');
-    Route::post('api/locales/{local}/toggle-estado', [App\Http\Controllers\LocalController::class, 'toggleEstado'])
-        ->middleware('role:Comision');
-
-    Route::resource('api/locales', App\Http\Controllers\LocalController::class)
-        ->except(['destroy'])
-        ->parameters(['locales' => 'local'])
-        ->middleware('role:Comision');
-    Route::resource('api/programas', App\Http\Controllers\ProgramaController::class)
-        ->except(['destroy'])
-        ->parameters(['programas' => 'programa'])
-        ->middleware('role:Comision');
-    Route::post('api/programas/{programa}/toggle-estado', [App\Http\Controllers\ProgramaController::class, 'toggleEstado'])
-        ->middleware('role:Comision');
-
-    Route::get('api/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
-    ->middleware('role:Comision');
+    Route::get('api/procesos-admision/activo', [App\Http\Controllers\ProcesoAdmisionController::class, 'activo'])->middleware('role:Administrador|Comision|Postulante');
+    Route::resource('api/procesos-admision', App\Http\Controllers\ProcesoAdmisionController::class)->middleware('role:Administrador|Comision');
+    route::post('api/procesos-admision/{proceso}/activar', [App\Http\Controllers\ProcesoAdmisionController::class, 'activar'])->middleware('role:Administrador|Comision');
+    Route::post('api/locales/{local}/toggle-estado', [App\Http\Controllers\LocalController::class, 'toggleEstado'])->middleware('role:Administrador|Comision');
+    Route::resource('api/locales', App\Http\Controllers\LocalController::class)->except(['destroy'])->parameters(['locales' => 'local'])->middleware('role:Administrador|Comision');
+    Route::resource('api/aulas', App\Http\Controllers\AulaController::class)->except(['destroy'])->parameters(['aulas' => 'aula'])->middleware('role:Administrador|Comision');
+    Route::post('api/aulas/{aula}/toggle-estado', [App\Http\Controllers\AulaController::class, 'toggleEstado'])->middleware('role:Administrador|Comision');
+    Route::resource('api/programas', App\Http\Controllers\ProgramaController::class)->except(['destroy'])->parameters(['programas' => 'programa'])->middleware('role:Administrador|Comision');
+    Route::post('api/programas/{programa}/toggle-estado', [App\Http\Controllers\ProgramaController::class, 'toggleEstado'])->middleware('role:Administrador|Comision');
+    Route::get('api/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->middleware('role:Administrador|Comision');
+    Route::post('api/fichas/{ficha}/anular', [App\Http\Controllers\FichaController::class, 'anular_inscripcion'])->middleware('role:Administrador|Comision');
+   
  
     Route::post('api/pagos/tarjeta', [App\Http\Controllers\PagoController::class, 'pago_tarjeta'])->middleware('role:Postulante');
     Route::post('api/pagos/verificar', [App\Http\Controllers\PagoController::class, 'verificar_pago'])->middleware('role:Administrador|Asesor|Colaborador|Tesoreria');
