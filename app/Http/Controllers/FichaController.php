@@ -59,26 +59,8 @@ class FichaController extends Controller
      */
     public function store(Request $request)
     {
-        /* $request->validate([
-            'apellidoPaterno'=>['required', 'max:50'],
-            'apellidoMaterno'=>['required', 'max:50'],
-
-            'nombres'=>['required', 'max:50'],
-            'edad'=>['required', 'integer', 'max:50'],
-
-            'email'=>['required', 'email', 'unique:users'],
-            'password'=>['required', 'min:6', 'confirmed'],
-        ]); */
-        //dd(Auth::user());
-
-        //
+        
         $extemporaneo = 0;
-        //DESCOMENTAR EN EXTEMPORANEO - ASIGNARÁ UN VALOR DE EXTEMPORANEO A LA FICHA -> "1" 
-        /* if($request->postulacion==2){
-            $extemporaneo = 0;
-        }else{
-            $extemporaneo = 1;
-        } */
 
         //VERIFICAR SI EXISTE FICHA
         $existeFicha = DB::table('fichas')
@@ -127,8 +109,6 @@ class FichaController extends Controller
                 'da_numero_celular' => $request->telefonoCelular,
                 'da_numero_telefono' => $request->telefonoFijo,
                 'da_email' => Auth::user()->email,
-                //'df_nombres_padre'=>mb_strtoupper($this->limpiar_datos($request->datosPadre)),
-                //'df_nombres_madre'=>mb_strtoupper($this->limpiar_datos($request->datosMadre)),
                 'df_nombres_apoderado' => mb_strtoupper($this->limpiar_datos($request->datosApoderado)),
                 'df_dni_apoderado' => $request->dniApoderado,
                 'df_celular_apoderado' => $request->celularApoderado,
@@ -137,7 +117,6 @@ class FichaController extends Controller
                 'de_cod_ruv' => mb_strtoupper($this->limpiar_datos($request->codigo_ruv)),
                 'de_nom_uni' => mb_strtoupper($this->limpiar_datos($request->universidad)),
                 'de_cred_uni' => $request->creditos,
-                // 'mcp_id_modalidad'=>$request->modalidad,
                 'mcp_id_carrera' => $request->carrera,
                 'mcp_tipo' => $mcp_tipo,
                 'dd_publicidad' => $request->entero,
@@ -145,30 +124,7 @@ class FichaController extends Controller
                 'extemporaneo' => $extemporaneo
             ]);
             $id_ficha_new = $ficha->id;
-            //echo $id_ficha_new;
-            //dd($ficha);
-            // if($request->modalidad==1 || $request->modalidad==11){
-            //     for ($i=3; $i <= 4; $i++) { 
-            //         $documento = Documento::create([
-            //             'tipo_documento_id'=>$i,
-            //             'ficha_id'=>$id_ficha_new,
-            //         ]);
-            //     }
-            // }elseif($request->modalidad==8){
-            //     for ($i=2; $i <= 3; $i++) { 
-            //         $documento = Documento::create([
-            //             'tipo_documento_id'=>$i,
-            //             'ficha_id'=>$id_ficha_new,
-            //         ]);
-            //     }
-            // }else{
-            //     for ($i=2; $i <= 4; $i++) { 
-            //         $documento = Documento::create([
-            //             'tipo_documento_id'=>$i,
-            //             'ficha_id'=>$id_ficha_new,
-            //         ]);
-            //     }
-            // }
+           
             for ($i = 2; $i <= 4; $i++) {
                 if ($i != 3) {
                     $documento = Documento::create([
@@ -193,8 +149,7 @@ class FichaController extends Controller
         };
 
 
-        //exit;
-
+ 
 
         return response()->json([
             //'ficha'=>$ficha,
@@ -234,13 +189,11 @@ class FichaController extends Controller
     public function ver($id)
     {
         $ficha = DB::table('fichas')
-            // ->join('modalidades', 'fichas.mcp_id_modalidad', '=', 'modalidades.id')
             ->join('carreras', 'fichas.mcp_id_carrera', '=', 'carreras.id')
             ->leftJoin('aulas', 'fichas.id_aula', '=', 'aulas.id')
             ->leftJoin('locales', 'aulas.local_id', '=', 'locales.id')
             ->select(
                 'fichas.*',
-                // 'modalidades.modalidad', 
                 'carreras.carrera',
                 'aulas.aula',
                 'locales.local',
@@ -374,7 +327,6 @@ class FichaController extends Controller
     }
     public function listarfichas(Request $request)
     {
-        // $modalidad = isset($request->modalidad) ? $request->modalidad : null;
         $carrera = isset($request->carrera) ? $request->carrera : null;
         $estado = isset($request->estado) ? $request->estado : null;
         $dato = isset($request->dato) ? $request->dato : null;
@@ -403,9 +355,6 @@ class FichaController extends Controller
                 $query->orWhere(DB::raw('concat(fichas.dp_apellido_p, " ",fichas.dp_apellido_m," ", fichas.dp_nombre)'), 'like', '%' . $dato . '%');
             });
         }
-        // if($modalidad){
-        //     $ficha=$ficha->where('fichas.mcp_id_modalidad', $modalidad);
-        // }
         if ($carrera) {
             $ficha = $ficha->where('fichas.mcp_id_carrera', $carrera);
         }
@@ -639,7 +588,6 @@ class FichaController extends Controller
 
     public function generar_carnet(Request $request)
     {
-        
         $url = 'https://posgrado.undc.edu.pe/carne_postulante.php?token=' . $request->token;
         $qrcode = base64_encode(QrCode::format('svg')->size(95)->errorCorrection('H')->generate($url));
         $token = isset($request->token) ? $request->token : null;
@@ -741,8 +689,7 @@ class FichaController extends Controller
         $resultado = $this->ver($id_ficha);
         $resultado = $resultado->getData('ficha');
         if ($resultado['ficha']['mcp_id_modalidad'] == 8 || $resultado['ficha']['id_aula'] == null) {
-            //if($resultado['ficha']['mcp_id_modalidad']==1 || $resultado['ficha']['mcp_id_modalidad']==8){
-            exit();
+             exit();
         }
         if ($download && $download = "si") {
             $fecha = date("Y-m-d H:i:s");
@@ -787,14 +734,12 @@ class FichaController extends Controller
         $condicion = isset($request->condicion) ? $request->condicion : null;
         $dato = isset($request->dato) ? $request->dato : null;
         $ficha = DB::table('fichas')
-            // ->join('modalidades', 'fichas.mcp_id_modalidad', '=', 'modalidades.id')
             ->join('carreras', 'fichas.mcp_id_carrera', '=', 'carreras.id')
             ->join('users', 'fichas.user_id', '=', 'users.id')
             ->join('aulas', 'fichas.id_aula', '=', 'aulas.id')
             ->join('locales', 'aulas.local_id', '=', 'locales.id')
             ->select(
                 'fichas.*',
-                // 'modalidades.modalidad',
                 'carreras.carrera',
                 DB::raw('concat(fichas.dp_apellido_p, " ",fichas.dp_apellido_m) as apellidos'),
                 'users.created_at as usuario_registro',
@@ -812,9 +757,7 @@ class FichaController extends Controller
                 $query->orWhere('fichas.codigo_p', 'like', '%' . $dato . '%');
             });
         }
-        // if($modalidad){
-        //     $ficha=$ficha->where('fichas.mcp_id_modalidad', $modalidad);
-        // }
+         
         if ($carrera) {
             $ficha = $ficha->where('fichas.mcp_id_carrera', $carrera);
         }
@@ -887,7 +830,6 @@ class FichaController extends Controller
             ], 422);
         }
 
-        // 5. Si pasa todos los filtros, procedemos a actualizar
         $fecha = date("Y-m-d H:i:s");
         
         $affected = DB::table('fichas')
